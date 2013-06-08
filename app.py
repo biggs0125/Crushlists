@@ -10,10 +10,7 @@ def home():
 
 @app.route("/add",methods=['GET','POST'])
 def add():
-    if request.method == "POST":
-        
-        print request.form
-        
+    if request.method == "POST":        
         username = ""
         password = ""
         current = ""
@@ -24,6 +21,7 @@ def add():
             name = mongo.getName(username,password)
             session['user'] = name
             crushlist = ""
+            print name
             if name == 0:
                 return render_template("add.html",name=True,crush=False,crushlist="")
             crushlist = mongo.getPeopleYouLike(str(name))
@@ -46,6 +44,7 @@ def add():
                 if test:
                     session['user'] = namereg
                     crushlist = mongo.getPeopleYouLike(str(namereg))
+                    crushlist = [x.strip() for x in crushlist.split(", ")]
                     for item in crushlist:
                         current += item + ", "
                         enter = False

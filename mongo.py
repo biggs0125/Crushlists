@@ -31,7 +31,10 @@ def addPerson(name,crushlist,*args):
     regx = re.compile("^"+name,re.IGNORECASE)
     r = [x for x in db.students.find({'name':regx})]
     if len(r) > 0:
-        db.students.update({'name':name},d)
+        if d.has_key('username'):
+            db.students.update({'name':name},d)
+        else:
+            db.students.update({'name':name},{'$set' : {'crushlist':crushlist}})
     else:
         db.students.insert(d)
 
@@ -122,12 +125,6 @@ def getPeopleWhoLikeYou2(name):
     r = [x for x in db.people.find({'crush':regx})]
     l = [x['name'] for x in r]
     return l
-
-
-
-
-
-
 
 
 #printAll()
